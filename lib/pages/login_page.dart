@@ -8,6 +8,29 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold();
+    return Scaffold(
+        backgroundColor: Colors.grey[300],
+        body: Column(children: [
+          //logo
+          Icon(
+            
+            Icons.lock,
+            size: 100,
+          )
+
+          //study together motive
+
+          //username
+
+          //password
+
+          //forogot password
+
+          //sign in button
+
+          //alternative sign in methord
+
+          //not a member?, register.
+        ]));
   }
 }

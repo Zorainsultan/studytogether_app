@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 //import the login screen from pages folder
 import 'package:studytogether_app/pages/login_page.dart';
+import 'pages/login_page.dart';
 
 //entry point of the app
 void main() {
