@@ -1,15 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/auth/login_or_register.dart';
 import 'package:studytogether_app/pages/login_page.dart';
 import 'package:studytogether_app/pages/register_page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:studytogether_app/firebase_options.dart';
 
 //entry point of the app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  await Firebase.initializeApp();
+  //run the app
+  runApp(MyApp());
 }
 
 //root widget of the app
