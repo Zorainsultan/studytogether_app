@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/uiComponents/my_textfield.dart';
 
-class LoginPage extends StatelessWidget {
-  final VoidCallback onTap;
-  //constructor for the login page
-  LoginPage({super.key, required this.onTap});
+class RegisterPage extends StatelessWidget {
+  final void Function()? onTap;
 
-//when user clicks on ree=gister button this function is called
-//final void Function() onTap;
+  RegisterPage({super.key, required this.onTap});
 
 //text controllers for the text fields
+  final fullNameController = TextEditingController();
+  final uniNameController = TextEditingController();
   final emailController = TextEditingController();
+  final majorController = TextEditingController();
   final passwordController = TextEditingController();
+  final levelController = TextEditingController();
+  final confirmpasswordController = TextEditingController();
 
-  void login() {}
+  void register() {}
 
   @override
   Widget build(BuildContext context) {
@@ -25,26 +27,42 @@ class LoginPage extends StatelessWidget {
             children: [
               SizedBox(height: 20),
 
-              // Logo
-              Image.asset(
-                'assets/images/LogoF.png',
-                height: 100,
+              // FullName entry
+              MyTextField(
+                controller: fullNameController,
+                hintText: 'Full Name',
+                obscureText: false,
               ),
-
-              // study together motive
-              Text(
-                ' Find, Connect, Succeed ',
-                style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 15,
-                    fontStyle: FontStyle.italic),
-              ),
-              SizedBox(height: 50), //gap between logo and text boxes
+              const SizedBox(height: 20),
 
               // email entry
               MyTextField(
                 controller: emailController,
                 hintText: 'Email',
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // Uni name entry
+              MyTextField(
+                controller: uniNameController,
+                hintText: 'Name of University',
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // Course name entry
+              MyTextField(
+                controller: majorController,
+                hintText: 'Course Enrolled',
+                obscureText: false,
+              ),
+              const SizedBox(height: 20),
+
+              // Study Level entry
+              MyTextField(
+                controller: levelController,
+                hintText: 'Study Level (Please select)',
                 obscureText: false,
               ),
               const SizedBox(height: 20),
@@ -55,25 +73,17 @@ class LoginPage extends StatelessWidget {
                 hintText: 'Password',
                 obscureText: true,
               ),
-              const SizedBox(height: 20),
 
-              // forgot password
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                          color: Colors.grey[600], fontStyle: FontStyle.italic),
-                    ),
-                  ],
-                ),
+              // confirm password
+              MyTextField(
+                controller: confirmpasswordController,
+                hintText: 'Confirm Password',
+                obscureText: true,
               ),
-              const SizedBox(height: 25),
 
-              // sign in button
+              const SizedBox(height: 190),
+
+              // Register button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(
@@ -90,7 +100,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     child: const Center(
                       child: Text(
-                        'Login',
+                        'Register',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -101,22 +111,22 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // not a member?, register.
 
+              // already a member?, login.
               const SizedBox(height: 20),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Don\'t have an account?',
+                    'Already have an account?',
                     style: TextStyle(color: Colors.black),
                   ),
                   SizedBox(width: 5),
                   GestureDetector(
                     onTap: onTap,
                     child: const Text(
-                      'Register here',
+                      'Login here',
                       style: TextStyle(
                         color: const Color.fromARGB(255, 0, 49, 89),
                         fontWeight: FontWeight.bold,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "917181680699",
+    "project_id": "studytogether-5b769",
+    "storage_bucket": "studytogether-5b769.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917181680699:android:369b518a06b3456dda601e",
+        "android_client_info": {
+          "package_name": "com.example.studytogether_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7xOOFSvmBYPsieyI8BRNR40UIIj-VyCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
