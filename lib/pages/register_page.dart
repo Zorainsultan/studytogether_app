@@ -4,6 +4,7 @@ import 'package:studytogether_app/uiComponents/my_textfield.dart';
 import 'package:studytogether_app/helper/helper_fn.dart';
 import 'package:studytogether_app/pages/home_page.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -56,10 +57,14 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      //create user document and add to firestore
+      createUserDocument(userCredential);
 
       if (context.mounted) Navigator.pop(context);
 
@@ -89,6 +94,21 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       if (context.mounted) Navigator.pop(context);
       displayMessageToUser("An unexpected error occurred.", context);
+    }
+  }
+
+  // Function to create user document in Firestore
+  Future<void> createUserDocument(UserCredential userCredential) async {
+    // Assuming you have a Firestore instance and a users collection
+    final user = userCredential.user;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
+        'fullName': fullNameController.text,
+        'email': emailController.text,
+        'university': uniNameController.text,
+        'major': majorController.text,
+        'level': levelController.text,
+      });
     }
   }
 

@@ -2,17 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/auth/login_or_register.dart';
 import 'package:studytogether_app/pages/login_page.dart';
+import 'package:studytogether_app/pages/profile_page.dart';
 import 'package:studytogether_app/pages/register_page.dart';
+import 'package:studytogether_app/pages/home_page.dart';
+import 'package:flutter/material.dart';
 
-//entry point of the app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  //run the app
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-//root widget of the app
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -21,7 +21,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'StudyTogether',
-      home: LoginOrRegister(),
+      home: const LoginOrRegister(),
+      routes: {
+        '/profile': (context) => ProfilePage(),
+        '/home': (context) => const HomePage(),
+        '/session': (context) => const Placeholder(), // TODO
+        '/search': (context) => const Placeholder(), // TODO
+        '/chat': (context) => const Placeholder(), // TODO
+      },
     );
   }
 }
