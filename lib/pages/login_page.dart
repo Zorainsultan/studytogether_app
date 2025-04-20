@@ -1,19 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/uiComponents/my_textfield.dart';
+import 'package:studytogether_app/helper/helper_fn.dart';
+import 'package:studytogether_app/pages/home_page.dart';
+import 'package:studytogether_app/pages/forgot_password_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final VoidCallback onTap;
-  //constructor for the login page
-  LoginPage({super.key, required this.onTap});
 
-//when user clicks on ree=gister button this function is called
-//final void Function() onTap;
+  const LoginPage({super.key, required this.onTap});
 
-//text controllers for the text fields
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void login() {}
+  void login() async {
+    // Show loading circle
+    showDialog(
+      context: context,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      if (context.mounted) Navigator.pop(context);
+
+      // if sucessful, redirect to home page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (context.mounted) Navigator.pop(context);
+
+      String message;
+      switch (e.code) {
+        case 'user-not-found':
+          message = 'No account found for that email.';
+          break;
+        case 'invalid-credential':
+          message = 'Your email or password is incorrect.';
+          break;
+        default:
+          message = 'Login failed. Please check your details.';
+      }
+
+      displayMessageToUser(message, context);
+    } catch (e) {
+      if (context.mounted) Navigator.pop(context);
+      displayMessageToUser('An unexpected error occurred.', context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +68,7 @@ class LoginPage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Logo
               Image.asset(
@@ -35,11 +80,13 @@ class LoginPage extends StatelessWidget {
               Text(
                 ' Find, Connect, Succeed ',
                 style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 15,
-                    fontStyle: FontStyle.italic),
+                  color: Colors.blue[900],
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
-              SizedBox(height: 50), //gap between logo and text boxes
+
+              const SizedBox(height: 50),
 
               // email entry
               MyTextField(
@@ -47,14 +94,16 @@ class LoginPage extends StatelessWidget {
                 hintText: 'Email',
                 obscureText: false,
               ),
+
               const SizedBox(height: 20),
 
-              // password
+              // password entry
               MyTextField(
                 controller: passwordController,
                 hintText: 'Password',
                 obscureText: true,
               ),
+
               const SizedBox(height: 20),
 
               // forgot password
@@ -63,29 +112,38 @@ class LoginPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                          color: Colors.grey[600], fontStyle: FontStyle.italic),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          //takes you to the forgot password page when user clicks on it
+                          MaterialPageRoute(
+                              builder: (context) => const ForgotPasswordPage()),
+                        );
+                      },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 25),
 
               // sign in button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: GestureDetector(
-                  onTap: () {
-                    // TODO: handle login logic here
-                    print(
-                        'Login pressed. Username: ${emailController.text}, Password: ${passwordController.text}');
-                  },
+                  onTap: login,
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.blue[900], //overall color of the button
+                      color: Colors.blue[900],
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Center(
@@ -101,24 +159,24 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // not a member?, register.
 
               const SizedBox(height: 20),
 
+              // not a member? register
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Don\'t have an account?',
                     style: TextStyle(color: Colors.black),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   GestureDetector(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: const Text(
                       'Register here',
                       style: TextStyle(
-                        color: const Color.fromARGB(255, 0, 49, 89),
+                        color: Color.fromARGB(255, 0, 49, 89),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
