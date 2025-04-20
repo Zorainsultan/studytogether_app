@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/auth/login_or_register.dart';
+import 'package:studytogether_app/helper/firebase_helper.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,6 +18,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Feature tile used for all 4 options
     Widget featureTile(String label, IconData icon, VoidCallback onTap) {
       return GestureDetector(
         onTap: onTap,
@@ -34,7 +36,9 @@ class HomePage extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w500),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
@@ -60,17 +64,42 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 25),
+
+          // greeting msg
           Center(
-            child: Text(
-              "Welcome 👋",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[900],
-              ),
+            child: FutureBuilder<String>(
+              future: fetchNameFromFirebase(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // while loading
+                } else if (snapshot.hasError ||
+                    !snapshot.hasData ||
+                    snapshot.data!.isEmpty) {
+                  return Text(
+                    "Welcome 👋",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[900],
+                    ),
+                  );
+                } else {
+                  return Text(
+                    "Welcome ${snapshot.data!} 👋",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[900],
+                    ),
+                  );
+                }
+              },
             ),
           ),
+
           const SizedBox(height: 30),
+
+          // 4 interactive features
           featureTile('Join / Create Session', Icons.calendar_today_outlined,
               () {
             Navigator.pushNamed(context, '/session');
