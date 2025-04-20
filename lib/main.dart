@@ -5,7 +5,9 @@ import 'package:studytogether_app/pages/login_page.dart';
 import 'package:studytogether_app/pages/profile_page.dart';
 import 'package:studytogether_app/pages/register_page.dart';
 import 'package:studytogether_app/pages/home_page.dart';
-import 'package:flutter/material.dart';
+import 'package:studytogether_app/pages/study_session.dart';
+import 'package:studytogether_app/pages/create_session.dart';
+import 'package:studytogether_app/pages/join_session.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/profile': (context) => ProfilePage(),
         '/home': (context) => const HomePage(),
-        '/session': (context) => const Placeholder(), // TODO
+        '/session': (context) => const StudySessionPage(),
+        '/join': (context) => const JoinSessionPage(),
+        '/create': (context) => const CreateSessionPage(),
         '/search': (context) => const Placeholder(), // TODO
         '/chat': (context) => const Placeholder(), // TODO
       },

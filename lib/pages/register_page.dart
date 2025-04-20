@@ -140,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 5),
                     const Text(
-                      'Let’s get you set up and matched with study partners',
+                      'Let’s get you set up and ace in your studies!',
                       style: TextStyle(fontSize: 14),
                       textAlign: TextAlign.center,
                     ),

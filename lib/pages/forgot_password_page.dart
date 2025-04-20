@@ -56,6 +56,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Reset Password"),
+        foregroundColor: Colors.white,
         backgroundColor: Colors.blue[900],
       ),
       body: Padding(
