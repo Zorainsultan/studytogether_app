@@ -47,9 +47,11 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("StudyTogether"),
         backgroundColor: Colors.blue[900],
+        foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
+            color: Colors.white,
             onPressed: () => logout(context),
           ),
         ],
