@@ -52,7 +52,7 @@ class EditProfileDialog {
                           value!.isEmpty ? 'Enter university' : null,
                     ),
 
-                    // major
+                    // course
                     TextFormField(
                       controller: courseController,
                       decoration: const InputDecoration(labelText: 'Course'),

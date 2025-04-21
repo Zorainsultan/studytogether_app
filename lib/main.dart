@@ -5,7 +5,7 @@ import 'package:studytogether_app/pages/login_page.dart';
 import 'package:studytogether_app/pages/profile_page.dart';
 import 'package:studytogether_app/pages/register_page.dart';
 import 'package:studytogether_app/pages/home_page.dart';
-import 'package:studytogether_app/pages/study_session.dart';
+import 'package:studytogether_app/pages/study_sessionhome.dart';
 import 'package:studytogether_app/pages/create_session.dart';
 import 'package:studytogether_app/pages/join_session.dart';
 

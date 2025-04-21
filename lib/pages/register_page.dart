@@ -24,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final levelController = TextEditingController();
   final confirmpasswordController = TextEditingController();
 
-  // List of UK university names
+  // List of some UK university names (add more when needed)
   final List<String> universityList = [
     'University of Oxford',
     'University of Cambridge',
@@ -36,6 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
     'University of Birmingham',
     'University of Edinburgh',
     'University of Nottingham',
+    'City, University of London',
   ];
 
   void registerUser() async {
