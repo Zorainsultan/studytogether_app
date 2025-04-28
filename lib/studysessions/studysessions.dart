@@ -5,8 +5,10 @@ class StudySession {
   final String location;
   final String description;
   final String date;
-  final String time;
+  final String startTime;
+  final String endTime;
   final bool recurring;
+  final String hostDetails;
   final List<String> participants;
 
   StudySession({
@@ -16,9 +18,11 @@ class StudySession {
     required this.location,
     required this.description,
     required this.date,
-    required this.time,
+    required this.startTime,
+    required this.endTime,
     required this.recurring,
     required this.participants,
+    required this.hostDetails,
   });
 
   factory StudySession.fromMap(String id, Map<String, dynamic> data) {
@@ -26,11 +30,13 @@ class StudySession {
       id: id,
       course: data['course'] ?? '',
       topic: data['topic'] ?? '',
-      location: data['location'] ?? '',
+      location: data['fullLocation'] ?? '',
       description: data['description'] ?? '',
       date: data['date'] ?? '',
-      time: data['time'] ?? '',
+      startTime: data['startTime'] ?? '',
+      endTime: data['endTime'] ?? '',
       recurring: data['recurring'] ?? false,
+      hostDetails: data['hostDetails'] ?? '',
       participants: List<String>.from(data['participants'] ?? []),
     );
   }

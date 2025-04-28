@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:studytogether_app/helper/helper_fn.dart';
+import 'package:studytogether_app/helper/alert_helper.dart';
 import 'package:studytogether_app/uiComponents/my_textfield.dart';
 
+//create a page for forgot password
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -11,29 +12,33 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+//controller to fetch email input from the user
   final emailController = TextEditingController();
 
+//function to reset password
   void resetPassword() async {
-    // loading while sending email
+// loading circle while sending reset password email
     showDialog(
       context: context,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );
-
+//trying to send password reset email
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim());
 
       if (context.mounted) Navigator.pop(context);
-
       displayMessageToUser(
         "Password reset link sent! Please check your email.",
         context,
         title: "Success",
       );
+
+//if there is an error, close the loading circle
     } on FirebaseAuthException catch (e) {
       if (context.mounted) Navigator.pop(context);
 
+//display error message based on the error code
       String message;
       switch (e.code) {
         case 'user-not-found':
@@ -50,6 +55,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
+//UI for the forgot password page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +70,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // explanation
             const Text(
               "Enter your email and we'll send you a password reset link.",
               style: TextStyle(fontSize: 16),

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/uiComponents/my_textfield.dart';
-import 'package:studytogether_app/helper/helper_fn.dart';
+import 'package:studytogether_app/helper/alert_helper.dart';
 import 'package:studytogether_app/pages/home_page.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

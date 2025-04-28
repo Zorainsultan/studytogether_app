@@ -11,7 +11,7 @@ class EditProfileDialog {
     required String currentStudyLevel,
     required Function(String, String, String, String, String) onSave,
   }) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final TextEditingController studyLevelController =
         TextEditingController(text: currentStudyLevel);
 
@@ -23,7 +23,7 @@ class EditProfileDialog {
             title: const Text('Edit Profile'),
             content: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -79,7 +79,7 @@ class EditProfileDialog {
               ),
               TextButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     onSave(
                       fullNameController.text,
                       emailController.text,

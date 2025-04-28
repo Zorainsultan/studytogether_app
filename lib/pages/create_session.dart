@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:studytogether_app/helper/time_helper.dart';
 
 class CreateSessionPage extends StatefulWidget {
   const CreateSessionPage({super.key});
@@ -19,7 +20,8 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
   final TextEditingController _descriptionController = TextEditingController();
 
   DateTime? _selectedDate;
-  TimeOfDay? _selectedTime;
+  TimeOfDay? _selectedStartTime;
+  TimeOfDay? _selectedEndTime;
   bool _isRecurring = false;
 
   // Helper to select a date
@@ -33,20 +35,37 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
     if (picked != null) setState(() => _selectedDate = picked);
   }
 
-  // Helper to select a time
-  Future<void> _pickTime() async {
+  // Helper to select start time
+  Future<void> _pickStartTime() async {
     final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    if (picked != null) setState(() => _selectedTime = picked);
+    if (picked != null) setState(() => _selectedStartTime = picked);
+  }
+
+// Helper to select end time
+  Future<void> _pickEndTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) setState(() => _selectedEndTime = picked);
   }
 
   // Save the session to Firebase
   Future<void> _saveSession() async {
     if (_formKey.currentState!.validate() &&
         _selectedDate != null &&
-        _selectedTime != null) {
+        _selectedStartTime != null &&
+        _selectedEndTime != null) {
+      if (!isEndTimeAfterStartTime(_selectedStartTime!, _selectedEndTime!)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('End time must be after start time.')),
+        );
+        return;
+      }
+
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -61,9 +80,11 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
         'fullLocation': _locationController.text.trim(),
         'description': _descriptionController.text.trim(),
         'date': _selectedDate!.toIso8601String(),
-        'time': _selectedTime!.format(context),
+        'startTime': _selectedStartTime!.format(context),
+        'endTime': _selectedEndTime!.format(context),
         'isRecurring': _isRecurring,
         'userId': user.uid,
+        'hostDetails': user.email,
         'createdAt': Timestamp.now(),
         'participants': []
       };
@@ -79,10 +100,13 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF4F6F8), // Match HomePage background
       appBar: AppBar(
         title: const Text('Create Session'),
-        backgroundColor: Colors.blue[900],
+        backgroundColor: Colors.blue[900], // Match HomePage appbar
         foregroundColor: Colors.white,
+        centerTitle: true,
+        elevation: 2,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -93,7 +117,11 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
               // Course input
               TextFormField(
                 controller: _courseController,
-                decoration: const InputDecoration(labelText: 'Course'),
+                decoration: const InputDecoration(
+                  labelText: 'Course',
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Enter course' : null,
               ),
@@ -103,51 +131,95 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
               // Topic input
               TextFormField(
                 controller: _topicController,
-                decoration: const InputDecoration(labelText: 'Topic'),
+                decoration: const InputDecoration(
+                  labelText: 'Topic',
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Enter topic' : null,
               ),
 
+              const SizedBox(height: 12),
+
               // Location input
-              const SizedBox(height: 12),
-              const SizedBox(height: 12),
               TextFormField(
                 controller: _locationController,
                 decoration: const InputDecoration(
                   labelText: 'Full Location',
                   suffixIcon: Icon(Icons.location_on),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Enter a location' : null,
               ),
 
+              const SizedBox(height: 12),
+
               // Description input
               TextFormField(
                 controller: _descriptionController,
                 maxLines: 3,
-                decoration:
-                    const InputDecoration(labelText: 'Session Description'),
+                decoration: const InputDecoration(
+                  labelText: 'Session Description',
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
               ),
 
               const SizedBox(height: 20),
 
               // Date picker
-              ListTile(
-                title: Text(_selectedDate == null
-                    ? 'Pick a Date'
-                    : 'Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}'),
-                trailing: const Icon(Icons.calendar_today),
-                onTap: _pickDate,
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Text(_selectedDate == null
+                      ? 'Pick a Date'
+                      : 'Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}'),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: _pickDate,
+                ),
               ),
 
-              // Time picker
-              ListTile(
-                title: Text(_selectedTime == null
-                    ? 'Pick a Time'
-                    : 'Time: ${_selectedTime!.format(context)}'),
-                trailing: const Icon(Icons.access_time),
-                onTap: _pickTime,
+              const SizedBox(height: 12),
+
+              // Start Time picker
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Text(_selectedStartTime == null
+                      ? 'Pick Start Time'
+                      : 'Start Time: ${_selectedStartTime!.format(context)}'),
+                  trailing: const Icon(Icons.access_time),
+                  onTap: _pickStartTime,
+                ),
               ),
+
+              const SizedBox(height: 12),
+
+// End Time picker
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Text(_selectedEndTime == null
+                      ? 'Pick End Time'
+                      : 'End Time: ${_selectedEndTime!.format(context)}'),
+                  trailing: const Icon(Icons.more_time),
+                  onTap: _pickEndTime,
+                ),
+              ),
+
+              const SizedBox(height: 12),
 
               // Recurring toggle
               SwitchListTile(
@@ -168,6 +240,9 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
                   foregroundColor: Colors.white,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],
