@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/session': (context) => const StudySessionPage(),
         '/join': (context) => const JoinSessionPage(),
         '/create': (context) => const CreateSessionPage(),
-        '/search': (context) => const SearchPartnersPage(),
+        '/find': (context) => const SearchPartnersPage(),
         '/chat': (context) => const Placeholder(), // TODO
       },
     );

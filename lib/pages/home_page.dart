@@ -104,8 +104,8 @@ class HomePage extends StatelessWidget {
               () {
             Navigator.pushNamed(context, '/session');
           }),
-          featureTile('Search Study Partners', Icons.search_outlined, () {
-            Navigator.pushNamed(context, '/search');
+          featureTile('Find Study Partners', Icons.find_in_page_outlined, () {
+            Navigator.pushNamed(context, '/find');
           }),
           featureTile('Chat', Icons.chat_bubble_outline, () {
             Navigator.pushNamed(context, '/chat');
