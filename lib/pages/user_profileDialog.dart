@@ -20,6 +20,7 @@ class ShowUserProfileDialog {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('User Profile'),
+
               //request to study button
               IconButton(
                 icon: const Icon(Icons.person_add_alt_1),
@@ -30,19 +31,37 @@ class ShowUserProfileDialog {
                   final fromUser = FirebaseAuth.instance.currentUser;
                   if (fromUser == null) return;
 
+                  final currentUserEmail = fromUser.email ?? '';
+
+                  //fetch the full name of the sender from Users collection
+                  final snapshot = await FirebaseFirestore.instance
+                      .collection('Users')
+                      .where('email', isEqualTo: currentUserEmail)
+                      .limit(1)
+                      .get();
+
+                  final fromName = snapshot.docs.isNotEmpty
+                      ? snapshot.docs.first['fullName']
+                      : 'Unknown';
+
+                  //prepare the request data
                   final request = {
-                    'fromEmail': fromUser.email,
-                    'fromName': fromUser.displayName ?? 'Anonymous',
+                    'fromEmail': currentUserEmail,
+                    'fromName': fromName,
                     'toEmail': email,
                     'toName': fullName,
                     'timestamp': FieldValue.serverTimestamp(),
                     'status': 'pending',
+                    'read':
+                        false, // to check if the notification is read or not
                   };
 
+                  //add the request to firestore
                   await FirebaseFirestore.instance
                       .collection('StudyRequests')
                       .add(request);
 
+                  //close the dialog and show confirmation
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Study request sent to $fullName!')),
@@ -51,6 +70,8 @@ class ShowUserProfileDialog {
               ),
             ],
           ),
+
+          //profile info content
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -76,7 +97,7 @@ class ShowUserProfileDialog {
             ),
           ),
 
-//close button
+          //close button
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/auth/login_or_register.dart';
 import 'package:studytogether_app/helper/firebase_helper.dart';
+import 'package:studytogether_app/pages/notifications_panel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -53,6 +56,69 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.blue[900],
         foregroundColor: Colors.white,
         actions: [
+          //notifications icon with red dot
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('StudyRequests')
+                .where('toEmail',
+                    isEqualTo: FirebaseAuth.instance.currentUser?.email)
+                .where('read', isEqualTo: false)
+                .snapshots(),
+            builder: (context, snapshot) {
+              final hasUnread =
+                  snapshot.hasData && snapshot.data!.docs.isNotEmpty;
+
+              return Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications),
+                    tooltip: 'Study Requests',
+                    onPressed: () async {
+                      //mark all as read when user opens the notifications panel
+                      final currentUserEmail =
+                          FirebaseAuth.instance.currentUser?.email;
+
+                      final unreadRequests = await FirebaseFirestore.instance
+                          .collection('StudyRequests')
+                          .where('toEmail', isEqualTo: currentUserEmail)
+                          .where('read', isEqualTo: false)
+                          .get();
+
+                      for (var doc in unreadRequests.docs) {
+                        await doc.reference.update({'read': true});
+                      }
+
+                      // Then show panel
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        builder: (context) => const NotificationsPanel(),
+                      );
+                    },
+                  ),
+                  if (hasUnread)
+                    Positioned(
+                      right: 10,
+                      top: 10,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+
+          //logout button
           IconButton(
             icon: const Icon(Icons.logout),
             color: Colors.white,
