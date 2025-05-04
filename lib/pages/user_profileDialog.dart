@@ -33,7 +33,34 @@ class ShowUserProfileDialog {
 
                   final currentUserEmail = fromUser.email ?? '';
 
-                  //fetch the full name of the sender from Users collection
+                  //check if a request already exists between the two users if it does you see the snackbar message
+                  final existingRequest = await FirebaseFirestore.instance
+                      .collection('StudyRequests')
+                      .where(Filter.or(
+                        Filter.and(
+                          Filter('fromEmail', isEqualTo: currentUserEmail),
+                          Filter('toEmail', isEqualTo: email),
+                        ),
+                        Filter.and(
+                          Filter('fromEmail', isEqualTo: email),
+                          Filter('toEmail', isEqualTo: currentUserEmail),
+                        ),
+                      ))
+                      .where('status', whereIn: ['pending', 'accepted'])
+                      .limit(1)
+                      .get();
+
+                  if (existingRequest.docs.isNotEmpty) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content: Text(
+                              'You are already connected with $fullName!')),
+                    );
+                    return;
+                  }
+
+                  //get sender full name
                   final snapshot = await FirebaseFirestore.instance
                       .collection('Users')
                       .where('email', isEqualTo: currentUserEmail)
@@ -42,26 +69,27 @@ class ShowUserProfileDialog {
 
                   final fromName = snapshot.docs.isNotEmpty
                       ? snapshot.docs.first['fullName']
-                      : 'Unknown';
+                      : 'unknown';
 
-                  //prepare the request data
+                  //create request data
                   final request = {
                     'fromEmail': currentUserEmail,
+                    'fromUID': fromUser.uid,
                     'fromName': fromName,
                     'toEmail': email,
+                    'toUID': await _getUIDFromEmail(email),
                     'toName': fullName,
                     'timestamp': FieldValue.serverTimestamp(),
                     'status': 'pending',
-                    'read':
-                        false, // to check if the notification is read or not
+                    'read': false
                   };
 
-                  //add the request to firestore
+                  //save request to firestore
                   await FirebaseFirestore.instance
                       .collection('StudyRequests')
                       .add(request);
 
-                  //close the dialog and show confirmation
+                  //close dialog and show snackbar
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Study request sent to $fullName!')),
@@ -71,7 +99,7 @@ class ShowUserProfileDialog {
             ],
           ),
 
-          //profile info content
+          //profile info section
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -107,5 +135,25 @@ class ShowUserProfileDialog {
         );
       },
     );
+  }
+
+  //get user uid by email
+  static Future<String> _getUIDFromEmail(String email) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs.first.data();
+      if (data.containsKey('uid')) {
+        return data['uid'];
+      } else {
+        return snapshot.docs.first.id;
+      }
+    } else {
+      return 'unknown_uid';
+    }
   }
 }

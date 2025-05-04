@@ -5,16 +5,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 class NotificationsPanel extends StatelessWidget {
   const NotificationsPanel({super.key});
 
-  //update the status of a request (accepted or rejected) in Firestore
+  //update the status of a request (accepted or rejected)
   Future<void> _updateRequestStatus(
       String requestId, String status, BuildContext context) async {
     final requestRef =
         FirebaseFirestore.instance.collection('StudyRequests').doc(requestId);
 
-    //update the status of the request
-    await requestRef.update({'status': status});
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) return;
 
-    //if the request is accepted, send a notification to the sender
+    //get full name of current user
+    final userDoc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser.uid)
+        .get();
+
+    final fullName = userDoc.data()?['fullName'] ?? 'unknown';
+
+    //update status and add current user's uid/name if accepted
+    await requestRef.update({
+      'status': status,
+      if (status == 'accepted') ...{
+        'toUID': currentUser.uid,
+        'toName': fullName,
+      }
+    });
+
+    //optional: send simple message to sender for notification
     if (status == 'accepted') {
       final requestSnapshot = await requestRef.get();
       final data = requestSnapshot.data();
@@ -22,14 +39,14 @@ class NotificationsPanel extends StatelessWidget {
       if (data != null) {
         await FirebaseFirestore.instance.collection('StudyRequests').add({
           'toEmail': data['fromEmail'],
-          'message': '${data['toName']} accepted your study request!',
+          'message': '$fullName accepted your study request!',
           'timestamp': FieldValue.serverTimestamp(),
           'read': false,
         });
       }
     }
 
-    //show confirm message
+    //show confirmation
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Request $status.')),
     );
@@ -37,7 +54,7 @@ class NotificationsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //get the email of current signed in user
+    //get current user's email
     final currentUserEmail = FirebaseAuth.instance.currentUser?.email ?? '';
 
     return Container(
@@ -50,7 +67,7 @@ class NotificationsPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //title of the notifications panel
+          //panel title
           const Text(
             'Notifications',
             style: TextStyle(
@@ -61,7 +78,7 @@ class NotificationsPanel extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          //show list of notifications/requests
+          //list of incoming requests
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -70,29 +87,28 @@ class NotificationsPanel extends StatelessWidget {
                   .where('status', isEqualTo: 'pending')
                   .snapshots(),
               builder: (context, snapshot) {
-                //show loading indicator while waiting for data
+                //show loading spinner while fetching
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                //if no request/notifications, show message
+                //if nothing found
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(child: Text('No New Notifications.'));
                 }
 
-                //if there are requests, display them
                 final requests = snapshot.data!.docs;
 
+                //show each request in card with accept/reject
                 return ListView.builder(
                   itemCount: requests.length,
                   itemBuilder: (context, index) {
                     final request = requests[index];
                     final data = request.data() as Map<String, dynamic>;
 
-                    final fromName = data['fromName'] ?? 'Unknown';
+                    final fromName = data['fromName'] ?? 'unknown';
                     final fromEmail = data['fromEmail'] ?? 'N/A';
 
-                    //show each request in a card with buttons to accept or reject
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       shape: RoundedRectangleBorder(
@@ -107,14 +123,14 @@ class NotificationsPanel extends StatelessWidget {
                         trailing: Wrap(
                           spacing: 8,
                           children: [
-                            //Reject button
+                            //reject button
                             IconButton(
                               icon: const Icon(Icons.close, color: Colors.red),
                               tooltip: 'Reject',
                               onPressed: () => _updateRequestStatus(
                                   request.id, 'rejected', context),
                             ),
-                            //Accept button
+                            //accept button
                             IconButton(
                               icon:
                                   const Icon(Icons.check, color: Colors.green),

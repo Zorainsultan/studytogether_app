@@ -114,6 +114,37 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
           key: _formKey,
           child: Column(
             children: [
+              //Information shown before the user starts creating a session
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                color: const Color.fromARGB(255, 186, 227, 239),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.blue[900]),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'All study sessions you create will be visible to other registered students in the join session page.\n\nYou can also edit or delete your sessions anytime from there.',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.blue[900],
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
               // Course input
               TextFormField(
                 controller: _courseController,
@@ -225,7 +256,8 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
               SwitchListTile(
                 value: _isRecurring,
                 onChanged: (val) => setState(() => _isRecurring = val),
-                title: const Text('Recurring Session?'),
+                title: const Text(
+                    'Recurring Session? Plesse use the toggle to set the session as recurring'),
               ),
 
               const SizedBox(height: 30),
@@ -233,7 +265,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
               // Save button
               ElevatedButton.icon(
                 onPressed: _saveSession,
-                icon: const Icon(Icons.save),
+                //icon: const Icon(Icons.save),
                 label: const Text('Create Session'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue[900],

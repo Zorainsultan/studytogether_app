@@ -5,6 +5,7 @@ import 'package:studytogether_app/helper/firebase_helper.dart';
 import 'package:studytogether_app/pages/notifications_panel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:studytogether_app/pages/accepted_partners.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -174,7 +175,12 @@ class HomePage extends StatelessWidget {
             Navigator.pushNamed(context, '/find');
           }),
           featureTile('Chat', Icons.chat_bubble_outline, () {
-            Navigator.pushNamed(context, '/chat');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AcceptedPartnersPage(),
+              ),
+            );
           }),
           featureTile('Profile', Icons.person_outline, () {
             Navigator.pushNamed(context, '/profile');

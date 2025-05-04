@@ -49,7 +49,7 @@ class StudySessionPage extends StatelessWidget {
                   child: Icon(Icons.add, color: Colors.white),
                 ),
                 title: const Text('Create a Study Session'),
-                subtitle: const Text('Organise and share a new session'),
+                subtitle: const Text('Organise a new session'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 18),
                 onTap: () {
                   Navigator.pushNamed(context, '/create');
