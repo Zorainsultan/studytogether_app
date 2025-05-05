@@ -6,13 +6,9 @@ A Flutter application designed to help university students create and join colla
 
 ###### Repository Link: https://github.com/Zorainsultan/studytogether_app
 
----
-
 ## About
 
 This document provides the instructions necessary to set up and run the StudyTogether application. Follow these steps to ensure the application is configured and runs correctly on your system.
-
----
 
 ## Folder Structure
 
@@ -23,8 +19,6 @@ The folder structure of this project is as follows:
 - The main function is located in `main.dart` under the `lib` folder.
 - Images used in the project are stored in the `assets` folder.
 
----
-
 ## Prerequisites
 
 Please make sure the following requirements are met before starting:
@@ -33,8 +27,6 @@ Please make sure the following requirements are met before starting:
 2. **Android Studio** – For Android emulation – [Download](https://developer.android.com/studio)
 3. **Xcode** – For iOS emulation (Mac only) – [Download](https://developer.apple.com/xcode/)
 4. **Visual Studio Code** (optional but recommended) – [Download](https://code.visualstudio.com/)
-
----
 
 ## Setup Instructions
 
@@ -92,14 +84,10 @@ Please be patient while the application builds and runs for the first time it ma
 
 Please also make sure you have are connected to a stable network.
 
----
-
 ## Notes
 
 - The app is not deployed to the Play Store or App Store.
 - The backend is cloud based, built using Firebase.
-
----
 
 ## Contact
 
