@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+// A utility class to show a dialog for editing user profile information.
 class EditProfileDialog {
-  // Show dialog to edit profile info
   static void show({
     required BuildContext context,
     required TextEditingController fullNameController,

@@ -3,17 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/uiComponents/my_textfield.dart';
 import 'package:studytogether_app/helper/alert_helper.dart';
 import 'package:studytogether_app/pages/home_page.dart';
-import 'package:studytogether_app/pages/forgot_password_page.dart';
+import 'package:studytogether_app/pages/forgot_passwordScreen.dart';
 
+// This page allows users to login to their account.
+// It uses Firebase Authentication to verify the user's credentials.
 class LoginPage extends StatefulWidget {
   final VoidCallback onTap;
 
   const LoginPage({super.key, required this.onTap});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
+// This class manages the state of the login page.
+// It handles user input, authentication, and navigation.
+// It also displays error messages to the user.
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -33,14 +37,16 @@ class _LoginPageState extends State<LoginPage> {
 
       if (context.mounted) Navigator.pop(context);
 
-      // if sucessful, redirect to home page
+      // if successful, redirect to home page
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } on FirebaseAuthException catch (e) {
+      // get rid of the loading circle if there is an error.
       if (context.mounted) Navigator.pop(context);
-
+      // Display error message based on the error code.
+      // This will help the user understand what went wrong.
       String message;
       switch (e.code) {
         case 'user-not-found':
@@ -52,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
         default:
           message = 'Login failed. Please check your details.';
       }
-
       displayMessageToUser(message, context);
     } catch (e) {
       if (context.mounted) Navigator.pop(context);
@@ -162,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 20),
 
-              // not a member? register
+              // not a member? register prompt
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

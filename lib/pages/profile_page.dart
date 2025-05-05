@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/auth/login_or_register.dart';
 import 'package:studytogether_app/pages/edit_profile.dart';
 
+// This screen (page) of the app shows the profile of the current user.
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -11,6 +12,9 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+// This class handles the state of the ProfilePage.
+// It fetches user details from Firestore, allows editing of the profile,
+// and handles user logout.
 class _ProfilePageState extends State<ProfilePage> {
   final User? currentUser = FirebaseAuth.instance.currentUser;
   Map<String, dynamic>? userData;
@@ -34,6 +38,8 @@ class _ProfilePageState extends State<ProfilePage> {
     getUserDetails();
   }
 
+// This function handles user logout.
+// It signs the user out from Firebase and navigates to the login/register page.
   void logout() async {
     await FirebaseAuth.instance.signOut();
     if (mounted) {
@@ -44,6 +50,10 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+// This function opens the EditProfileDialog.
+// It allows the user to edit their profile information.
+// The dialog is pre-filled with the current user's information.
+// After saving, it updates the Firestore document and refreshes the user data.
   void openEditProfile() {
     EditProfileDialog.show(
       context: context,

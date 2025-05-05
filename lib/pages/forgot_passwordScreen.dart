@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/helper/alert_helper.dart';
 import 'package:studytogether_app/uiComponents/my_textfield.dart';
 
-//create a page for forgot password
+//create a page that user can access when they click on forgot password?.
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -12,17 +12,19 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-//controller to fetch email input from the user
+// Controller to fetch email input from the user.
   final emailController = TextEditingController();
 
-//function to reset password
+// Function to reset password.
   void resetPassword() async {
-// loading circle while sending reset password email
+// Loading circle while sending reset password email.
     showDialog(
       context: context,
       builder: (context) => const Center(child: CircularProgressIndicator()),
     );
-//trying to send password reset email
+// Trying to send password reset email to the email provided by the user.
+// If the email is valid, a password reset link will be sent to the email.
+// If the email is not valid, an error message will be displayed.
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim());
@@ -34,15 +36,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         title: "Success",
       );
 
-//if there is an error, close the loading circle
+// If there is an error, close the loading circle.
     } on FirebaseAuthException catch (e) {
       if (context.mounted) Navigator.pop(context);
 
-//display error message based on the error code
+// Display error message based on the error code.
       String message;
       switch (e.code) {
         case 'user-not-found':
-          message = "No user found with that email.";
+          message = "No account found with that email.";
           break;
         case 'invalid-email':
           message = "Please enter a valid email address.";
@@ -55,7 +57,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
-//UI for the forgot password page
+// UI for the forgot password page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
             const SizedBox(height: 30),
 
-            // email input
+            // Email input
             MyTextField(
               controller: emailController,
               hintText: 'Email',
@@ -85,7 +87,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
             const SizedBox(height: 20),
 
-            // reset password button
+            // Reset password button
             GestureDetector(
               onTap: resetPassword,
               child: Container(

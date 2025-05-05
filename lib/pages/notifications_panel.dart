@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// This widget displays a panel for notifications, specifically study requests.
+// It allows users to accept or reject study requests from other users.
+// The requests are stored in Firestore and are streamed live.
 class NotificationsPanel extends StatelessWidget {
   const NotificationsPanel({super.key});
 
@@ -31,7 +34,7 @@ class NotificationsPanel extends StatelessWidget {
       }
     });
 
-    //optional: send simple message to sender for notification
+    // send simple message to sender for notification stores to firebase
     if (status == 'accepted') {
       final requestSnapshot = await requestRef.get();
       final data = requestSnapshot.data();
@@ -52,6 +55,7 @@ class NotificationsPanel extends StatelessWidget {
     );
   }
 
+// UI for the notifications panel.
   @override
   Widget build(BuildContext context) {
     //get current user's email

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// The screen (page) where the user can chat with another user.
+// Messages are stored in Firestore and are streamed live.
+// Stored under a unique chat ID which is generated based on the two user IDs.
+// It lets the user type and send messages which are then stored in Firestore.
 class ChatPage extends StatefulWidget {
   final String otherUserId;
   final String otherUserName;
@@ -16,6 +20,7 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
+// This class gets the current logged in user and the other user ID.
 class _ChatPageState extends State<ChatPage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final messageController = TextEditingController();
@@ -27,18 +32,19 @@ class _ChatPageState extends State<ChatPage> {
     chatId = _getChatId(currentUser.uid, widget.otherUserId);
   }
 
-//generate a unique chat ID based on the two user IDs
+// Helper to generate a unique chat ID based on the two user IDs regardless of
+// who is the sender and who is the receiver.
   String _getChatId(String uid1, String uid2) {
     return uid1.hashCode <= uid2.hashCode ? '$uid1\_$uid2' : '$uid2\_$uid1';
   }
 
-//Send message to Firestore
+// Helper that gets the messages user has sent, ignore if it is empty.
   void sendMessage() async {
     final text = messageController.text
-        .trim(); //get the text from the message controller
-    if (text.isEmpty) return; //if the text is empty return
+        .trim(); // get the text from the message controller
+    if (text.isEmpty) return; // if the text is empty return
 
-//add the message to chat collection in Firestore
+// Adds the message to chat collection in Firestore.
     await FirebaseFirestore.instance
         .collection('chats')
         .doc(chatId)
@@ -49,7 +55,7 @@ class _ChatPageState extends State<ChatPage> {
       'timestamp': FieldValue.serverTimestamp(),
     });
 
-    messageController.clear();
+    messageController.clear(); // clear the message input field
   }
 
   @override
@@ -111,16 +117,16 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
 
-          //divider between messages and input field
+          // Divider between messages and input field.
           const Divider(height: 1),
 
-          //message input field
+          // Message input field.
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             color: Colors.white,
             child: Row(
               children: [
-                //text field for message input
+                // Text field for message input
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14),

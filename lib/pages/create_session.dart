@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:studytogether_app/helper/time_helper.dart';
 
+// This page allows users to create a study session.
+// Saves the session data to Firebase Firestore.
 class CreateSessionPage extends StatefulWidget {
   const CreateSessionPage({super.key});
 
@@ -24,7 +26,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
   TimeOfDay? _selectedEndTime;
   bool _isRecurring = false;
 
-  // Helper to select a date
+  // Helper to select a date.
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -35,7 +37,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
     if (picked != null) setState(() => _selectedDate = picked);
   }
 
-  // Helper to select start time
+  // Helper to select start time.
   Future<void> _pickStartTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -44,7 +46,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
     if (picked != null) setState(() => _selectedStartTime = picked);
   }
 
-// Helper to select end time
+// Helper to select end time.
   Future<void> _pickEndTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -114,7 +116,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
           key: _formKey,
           child: Column(
             children: [
-              //Information shown before the user starts creating a session
+              //Information shown in a card before the user starts creating a session
               Card(
                 elevation: 3,
                 shape: RoundedRectangleBorder(
@@ -235,7 +237,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
 
               const SizedBox(height: 12),
 
-// End Time picker
+              // End Time picker
               Card(
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -257,7 +259,7 @@ class _CreateSessionPageState extends State<CreateSessionPage> {
                 value: _isRecurring,
                 onChanged: (val) => setState(() => _isRecurring = val),
                 title: const Text(
-                    'Recurring Session? Plesse use the toggle to set the session as recurring'),
+                    'Recurring Session? Please use this toggle to mark as recurring'),
               ),
 
               const SizedBox(height: 30),

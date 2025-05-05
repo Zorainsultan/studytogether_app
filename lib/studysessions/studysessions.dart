@@ -1,15 +1,18 @@
+// This file defines the StudySession class.
+// Each study session has details like course, topic, location, date, time, etc.
+
 class StudySession {
-  final String id;
-  final String course;
-  final String topic;
-  final String location;
-  final String description;
-  final String date;
-  final String startTime;
-  final String endTime;
-  final bool recurring;
-  final String hostDetails;
-  final List<String> participants;
+  final String id; // unique ID for the session
+  final String course; // course name
+  final String topic; // session topic
+  final String location; // full location
+  final String description; // optional description
+  final String date; // session date in ISO 8601 format
+  final String startTime; // start time
+  final String endTime; // end time
+  final bool recurring; // true if the session repeats
+  final String hostDetails; // email of the user who created it
+  final List<String> participants; // list of user emails who joined
 
   StudySession({
     required this.id,
@@ -25,6 +28,7 @@ class StudySession {
     required this.hostDetails,
   });
 
+  // Convert Firestore data into a StudySession object
   factory StudySession.fromMap(String id, Map<String, dynamic> data) {
     return StudySession(
       id: id,

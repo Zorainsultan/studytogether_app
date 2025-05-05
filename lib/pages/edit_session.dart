@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/studysessions/studysessions.dart';
 
+// a popup dialog to edit the existing study session
 class EditSessionDialog {
   // Show dialog to edit session info
   static void show({
@@ -10,7 +11,7 @@ class EditSessionDialog {
             String course, String topic, String location, DateTime date)
         onSave,
   }) {
-    final formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>(); // checks and validates the form
 
     final TextEditingController courseController =
         TextEditingController(text: session.course);
@@ -19,8 +20,9 @@ class EditSessionDialog {
     final TextEditingController locationController =
         TextEditingController(text: session.location);
 
-    DateTime selectedDate = DateTime.parse(session.date);
+    DateTime selectedDate = DateTime.parse(session.date); // date of the session
 
+// UI for the dialog
     showDialog(
       context: context,
       builder: (context) {
@@ -86,7 +88,7 @@ class EditSessionDialog {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: const Text('Cancel'), // close the dialog
               ),
               TextButton(
                 onPressed: () {
@@ -100,7 +102,7 @@ class EditSessionDialog {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Save'),
+                child: const Text('Save'), // save the changes
               ),
             ],
           );

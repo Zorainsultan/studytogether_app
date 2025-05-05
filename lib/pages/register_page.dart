@@ -6,15 +6,16 @@ import 'package:studytogether_app/pages/home_page.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// A widget that allows users to register for an account.
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
-
   const RegisterPage({super.key, required this.onTap});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+// This class manages the state of the registration page.
 class _RegisterPageState extends State<RegisterPage> {
   final fullNameController = TextEditingController();
   final uniNameController = TextEditingController();
@@ -38,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
     'University of Nottingham',
     'City, University of London',
   ];
-
+// Function to register a new user.
   void registerUser() async {
     showDialog(
       context: context,
@@ -56,7 +57,6 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       return;
     }
-
     try {
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -64,9 +64,10 @@ class _RegisterPageState extends State<RegisterPage> {
         password: passwordController.text.trim(),
       );
 
-      //create user document and add to firestore
+      // Create user document and add to firestore.
       createUserDocument(userCredential);
 
+      // If the user is successfully registered, go to the home page.
       if (context.mounted) Navigator.pop(context);
 
       Navigator.pushReplacement(
@@ -74,8 +75,10 @@ class _RegisterPageState extends State<RegisterPage> {
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } on FirebaseAuthException catch (e) {
+      // Close the loading circle if there is an error.
+      // Display error message based on the error code.
+      // This will help the user understand what went wrong.
       if (context.mounted) Navigator.pop(context);
-
       String message;
       switch (e.code) {
         case 'email-already-in-use':
@@ -100,7 +103,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Function to create user document in Firestore
   Future<void> createUserDocument(UserCredential userCredential) async {
-    // Assuming you have a Firestore instance and a users collection
     final user = userCredential.user;
     if (user != null) {
       await FirebaseFirestore.instance.collection('Users').doc(user.uid).set({
@@ -123,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Logo or heading
+              // Logo and heading
               Center(
                 child: Column(
                   children: [
@@ -141,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 5),
                     const Text(
-                      'Let’s get you set up and ace in your studies!',
+                      'Let’s get you set up to excel in your studies!',
                       style: TextStyle(fontSize: 14),
                       textAlign: TextAlign.center,
                     ),
@@ -233,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               MyTextField(
                 controller: majorController,
-                hintText: 'Course Enrolled',
+                hintText: 'Course (e.g. Computer Science)',
                 obscureText: false,
               ),
               const SizedBox(height: 20),

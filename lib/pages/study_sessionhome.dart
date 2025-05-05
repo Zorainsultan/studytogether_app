@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// This widget represents the home page for study sessions.
+// It allows users to join or create a study session.
 class StudySessionPage extends StatelessWidget {
   const StudySessionPage({super.key});
 
@@ -22,7 +24,7 @@ class StudySessionPage extends StatelessWidget {
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12)), // Rounded corners
               child: ListTile(
                 leading: const CircleAvatar(
                   backgroundColor: Colors.blue,
@@ -38,9 +40,9 @@ class StudySessionPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            //create Button
+            // Create Button
             Card(
-              elevation: 4,
+              elevation: 4, // Add elevation for shadow effect
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(

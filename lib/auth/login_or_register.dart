@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studytogether_app/pages/login_page.dart';
 import 'package:studytogether_app/pages/register_page.dart';
 
+/// A widget that toggles between the login and registration pages.
 class LoginOrRegister extends StatefulWidget {
   const LoginOrRegister({super.key});
 
@@ -10,15 +11,15 @@ class LoginOrRegister extends StatefulWidget {
 }
 
 class _LoginOrRegisterState extends State<LoginOrRegister> {
-  //initally show login page
+  // Initally show login page.
   bool showLoginPage = true;
 
-  //toggle between login and register page
+  // Toggle between login and register page.
   void togglePages() {
     setState(() {
       showLoginPage = !showLoginPage;
     });
-  } // Added missing closing brace
+  }
 
   @override
   Widget build(BuildContext context) {

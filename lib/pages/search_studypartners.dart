@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/pages/search_results.dart';
 
+// This page allows users to search for study partners based on their
+// university and course. It fetches unique universities and courses from
+// the Firestore database and displays them in dropdown menus.
 class SearchPartnersPage extends StatefulWidget {
   const SearchPartnersPage({super.key});
 
@@ -18,7 +21,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
   Set<String> universityOptions = {};
   Set<String> courseOptions = {};
 
-  // fetch unique universities and courses from Users collection
+  // Fetch unique universities and courses from Users collection.
   Future<void> _loadFilterOptions() async {
     final snapshot = await FirebaseFirestore.instance.collection('Users').get();
     for (var doc in snapshot.docs) {
@@ -60,7 +63,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // info card explaining how to use the filter
+                  // Information card explaining how to use the filter
                   Card(
                     elevation: 3,
                     shape: RoundedRectangleBorder(
@@ -76,7 +79,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'Please select a university and course from the dropdowns below to find students with the matching criteria.\n\nOnly students registered in the app will appear in the results.',
+                              'Please select a university and course from the dropdowns below to find students who matched your selected criteria.\n\nOnly students registered in the app will appear in the results.',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -91,7 +94,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                   ),
                   const SizedBox(height: 24),
 
-                  // university dropdown
+                  // University dropdown
                   DropdownButtonFormField<String>(
                     value: _selectedUniversity,
                     decoration: const InputDecoration(
@@ -113,7 +116,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // course dropdown
+                  // Course dropdown
                   DropdownButtonFormField<String>(
                     value: _selectedCourse,
                     decoration: const InputDecoration(
@@ -135,7 +138,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                   ),
                   const SizedBox(height: 24),
 
-                  // search button
+                  // Search button
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
@@ -145,6 +148,11 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 12),
                       ),
+                      // Find partners button
+                      // When pressed, navigate to the search results page
+                      // if one of the dropdowns is not selected, show a snackbar
+                      // with a message to select both university and course
+
                       onPressed: () {
                         if (_selectedUniversity != null &&
                             _selectedCourse != null) {
@@ -157,9 +165,17 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                               ),
                             ),
                           );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please select both university and course.'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                         }
                       },
-                      child: const Text('Find Partners'),
+                      child: const Text('Find Students'),
                     ),
                   ),
                 ],
@@ -171,7 +187,7 @@ class _SearchPartnersPageState extends State<SearchPartnersPage> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
-                  Text('Loading options...'),
+                  Text('Loading universities and courses...'),
                 ],
               ),
             ),

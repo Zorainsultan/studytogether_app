@@ -7,10 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/pages/accepted_partners.dart';
 
+// This pahge is the home page of the app.
+// First page the user sees after login.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  // logout function
+  // Logout function which logs the user out and send them to the login page.
   void logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
 
@@ -57,7 +59,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.blue[900],
         foregroundColor: Colors.white,
         actions: [
-          //notifications icon with red dot
+          // Notifications icon with red dot
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('StudyRequests')
@@ -68,14 +70,13 @@ class HomePage extends StatelessWidget {
             builder: (context, snapshot) {
               final hasUnread =
                   snapshot.hasData && snapshot.data!.docs.isNotEmpty;
-
               return Stack(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.notifications),
+                    icon: const Icon(Icons.notifications), // Notification icon
                     tooltip: 'Study Requests',
                     onPressed: () async {
-                      //mark all as read when user opens the notifications panel
+                      // When the icon is pressed, mark all unread requests as read
                       final currentUserEmail =
                           FirebaseAuth.instance.currentUser?.email;
 
@@ -132,7 +133,9 @@ class HomePage extends StatelessWidget {
         children: [
           const SizedBox(height: 25),
 
-          // greeting msg
+          // Greeting message
+          // This will be replaced with the user's name from Firebase
+          // If the name is not available, it will show "Hello 👋"
           Center(
             child: FutureBuilder<String>(
               future: fetchNameFromFirebase(),
@@ -143,7 +146,7 @@ class HomePage extends StatelessWidget {
                     !snapshot.hasData ||
                     snapshot.data!.isEmpty) {
                   return Text(
-                    "Welcome 👋",
+                    "Hello 👋",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -152,7 +155,7 @@ class HomePage extends StatelessWidget {
                   );
                 } else {
                   return Text(
-                    "Welcome ${snapshot.data!} 👋",
+                    "Hello ${snapshot.data!} 👋",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -182,7 +185,7 @@ class HomePage extends StatelessWidget {
               ),
             );
           }),
-          featureTile('Profile', Icons.person_outline, () {
+          featureTile('Your Profile', Icons.person_outline, () {
             Navigator.pushNamed(context, '/profile');
           }),
         ],

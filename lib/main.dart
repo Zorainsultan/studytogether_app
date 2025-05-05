@@ -5,11 +5,10 @@ import 'package:studytogether_app/pages/accepted_partners.dart';
 import 'package:studytogether_app/pages/chat.dart';
 import 'package:studytogether_app/pages/profile_page.dart';
 import 'package:studytogether_app/pages/home_page.dart';
-import 'package:studytogether_app/pages/study_sessionhome.dart';
+import 'package:studytogether_app/pages/study_sessionHome.dart';
 import 'package:studytogether_app/pages/create_session.dart';
 import 'package:studytogether_app/pages/join_session.dart';
-import 'package:studytogether_app/pages/search_studypartners.dart';
-import 'package:studytogether_app/pages/chat.dart';
+import 'package:studytogether_app/pages/search_studyPartners.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +32,10 @@ class MyApp extends StatelessWidget {
         '/join': (context) => const JoinSessionPage(),
         '/create': (context) => const CreateSessionPage(),
         '/find': (context) => const SearchPartnersPage(),
-        '/chat': (context) => ChatPage(
-              otherUserId: '1234',
-              otherUserName: 'Zorain Sultan',
-            ),
+        //'/chat': (context) => ChatPage(
+        //     otherUserId: '1234',
+        //    otherUserName: 'Zorain Sultan',
+        //    ),
         '/partners': (context) => const AcceptedPartnersPage(),
       },
     );

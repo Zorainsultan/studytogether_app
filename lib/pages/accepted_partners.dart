@@ -3,18 +3,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studytogether_app/pages/chat.dart';
 
-/// This page displays a list of users with whom the current user has
-/// an accepted study request (sent or received). Tapping a user opens a chat.
+// This screen (page) of the app shows all the accepted study partners of the
+// current user.
+// it displays each study partner only once and opens the 1 to 1 chat page
+// when the signed in user taps on the study partner's name.
 class AcceptedPartnersPage extends StatelessWidget {
   const AcceptedPartnersPage({super.key});
 
-  /// Fetches all accepted study partners for the current user.
-  /// Only returns one entry per user, even if multiple requests exist.
+  // Fetches all accepted study partners for the current user.
+  // Only returns one entry per user even if multiple requests exist.
   Future<List<Map<String, dynamic>>> fetchAcceptedPartners() async {
     final currentUser = FirebaseAuth.instance.currentUser!;
     final currentUserUID = currentUser.uid;
 
-    // Query all accepted requests where current user is sender or recipient
+    // Query all accepted requests where current user is sender or receiver
+    // and where the status is 'accepted'.
+    // Note: This assumes that the 'fromUID' and 'toUID' fields are always
+    // present in the documents.
     final snapshot = await FirebaseFirestore.instance
         .collection('StudyRequests')
         .where('status', isEqualTo: 'accepted')
@@ -33,7 +38,7 @@ class AcceptedPartnersPage extends StatelessWidget {
       final fromName = doc['fromName'];
       final toName = doc['toName'];
 
-      // Skip if required fields are missing
+      // Skip if the required fields are missing.
       if (fromUID == null ||
           toUID == null ||
           fromName == null ||
@@ -41,7 +46,7 @@ class AcceptedPartnersPage extends StatelessWidget {
         continue;
       }
 
-      // Identify the *other* user (not the current user)
+      // Identify the Other user (not the current user).
       String partnerUID;
       String partnerName;
 
@@ -53,7 +58,7 @@ class AcceptedPartnersPage extends StatelessWidget {
         partnerName = fromName;
       }
 
-      // Add only if not already seen
+      // Add to the result if not already added.
       if (partnerUID.trim().isNotEmpty && !seenUIDs.contains(partnerUID)) {
         seenUIDs.add(partnerUID);
         partners.add({
@@ -66,6 +71,7 @@ class AcceptedPartnersPage extends StatelessWidget {
     return partners;
   }
 
+// This method builds the UI for the page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +112,7 @@ class AcceptedPartnersPage extends StatelessWidget {
                 title: Text(partner['name']),
                 // trailing: const Icon(Icons.chat_bubble_outline),
                 onTap: () {
+                  // Go to chat page with the selected partner
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// This widget is a custom text field that can be used for both normal and password input.
 class MyTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;

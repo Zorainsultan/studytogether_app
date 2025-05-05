@@ -5,7 +5,7 @@ import 'package:studytogether_app/studysessions/studysessions.dart';
 import 'package:studytogether_app/helper/date_helper.dart';
 import 'package:studytogether_app/pages/edit_session.dart';
 
-//Make join session screen, stateless
+// This page allows users to join a study session.
 class JoinSessionPage extends StatelessWidget {
   const JoinSessionPage({super.key});
 

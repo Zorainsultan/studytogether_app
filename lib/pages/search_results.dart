@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studytogether_app/pages/user_profileDialog.dart';
 
+// This page displays the search results based on the selected university and course.
 class SearchResultsPage extends StatelessWidget {
   final String university;
   final String course;
@@ -13,7 +14,7 @@ class SearchResultsPage extends StatelessWidget {
     required this.course,
   });
 
-  // stream that returns users matching the selected university and course
+// Fetches users from Firestore based on the selected university and course.
   Stream<QuerySnapshot> _getFilteredUsers() {
     return FirebaseFirestore.instance
         .collection('Users')
@@ -22,10 +23,11 @@ class SearchResultsPage extends StatelessWidget {
         .snapshots();
   }
 
+// This method builds the UI of the page.
   @override
   Widget build(BuildContext context) {
-    final currentUserEmail = FirebaseAuth.instance.currentUser?.email ?? '';
-
+    final currentUserEmail = FirebaseAuth.instance.currentUser?.email ??
+        ''; // Get the current user's email
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F8),
       appBar: AppBar(
@@ -37,25 +39,26 @@ class SearchResultsPage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: _getFilteredUsers(),
         builder: (context, snapshot) {
-          // show loading spinner while waiting for data
+          // Show loading spinner while waiting for data
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
           final users = snapshot.data?.docs ?? [];
 
-          // exclude the current signed-in user from results
+          // Exclude the current signed in user from results
           final filteredUsers = users.where((doc) {
             final data = doc.data() as Map<String, dynamic>;
             return data['email'] != currentUserEmail;
           }).toList();
 
-          // if no users found, display message
+          // If no users found, display the error message
           if (filteredUsers.isEmpty) {
             return const Center(
               child: Text(
-                'No users found. Try different filters.',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                'No students found. Please try different filters or come back later.',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
               ),
             );
           }
@@ -63,7 +66,7 @@ class SearchResultsPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // info box shown at the top of results
+              // Info box shown at the top of results
               Card(
                 elevation: 3,
                 shape: RoundedRectangleBorder(
@@ -94,7 +97,7 @@ class SearchResultsPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // display each matching user in a card
+              // Display each matching user in a card
               ...filteredUsers.map((doc) {
                 final userData = doc.data() as Map<String, dynamic>;
                 final name = userData['fullName'] ?? 'Unknown';
@@ -119,7 +122,7 @@ class SearchResultsPage extends StatelessWidget {
                       final level = userData['level'] ?? 'N/A';
                       final bio = userData['bio'];
 
-                      // show profile dialog when user taps a card
+                      // Show profile dialog when user taps a card.
                       ShowUserProfileDialog.show(
                         context: context,
                         fullName: name,
@@ -127,7 +130,6 @@ class SearchResultsPage extends StatelessWidget {
                         university: university,
                         course: course,
                         studyLevel: level,
-                        bio: bio,
                       );
                     },
                   ),
