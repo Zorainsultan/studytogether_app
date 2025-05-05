@@ -1,87 +1,109 @@
-# Application Name: StudyTogether
+# StudyTogether
 
-###### File Name: studytogether_app
+A Flutter application designed to help university students create and join collaborative study sessions while also enabling them to find study partners.
 
-A Flutter application designed for university students to find and join sessions.
+###### File Name: `studytogether_app`
+
+###### Repository Link: https://github.com/Zorainsultan/studytogether_app
+
+---
 
 ## About
 
-This document provides the instructions necessary to set up and run the StudyTogether application. Follow these steps to make sure that the application is configured and runs correctly on your system.
+This document provides the instructions necessary to set up and run the StudyTogether application. Follow these steps to ensure the application is configured and runs correctly on your system.
+
+---
 
 ## Folder Structure
 
 The folder structure of this project is as follows:
 
-- All the produced code is in the lib folder. This folder is structured in a way for easy navigation. It has folders as for the different UI pages, for example login, join/create session, profile etc.
-- The main function to run the application is in main.dart uneder the lib folder.
-- The images used are in the assets folder.
+- All source code is in the `lib` folder.
+- Most UI designs and main functionalities are under the `pages` subfolder.
+- The main function is located in `main.dart` under the `lib` folder.
+- Images used in the project are stored in the `assets` folder.
+
+---
 
 ## Prerequisites
 
-Please make sure the following requirements are met before you begin:
+Please make sure the following requirements are met before starting:
 
-1. Flutter SDK: Installed and configured. https://docs.flutter.dev/get-started/install
-2. Android Studio: For Android emulation. https://developer.android.com/studio
-3. Xcode: For iOS emulation (Mac only). https://developer.apple.com/xcode/
-4. Visual Studio Code: Optional but recommended for code editing. https://code.visualstudio.com/
+1. **Flutter SDK** – [Install Flutter](https://docs.flutter.dev/get-started/install)
+2. **Android Studio** – For Android emulation – [Download](https://developer.android.com/studio)
+3. **Xcode** – For iOS emulation (Mac only) – [Download](https://developer.apple.com/xcode/)
+4. **Visual Studio Code** (optional but recommended) – [Download](https://code.visualstudio.com/)
 
-## Set Up Instuctions
+---
 
-1. Install Flutter
-   Vist the Flutter official site and download the Flutter SDK. Once downloaded, follow the platform specific instructions to add Flutter to your system’s PATH environment so you can use it from the terminal.
+## Setup Instructions
 
-2. Unpack the Project
-   Extract the zipped project folder to any location on your machine where you'd like to keep the project files.
+### 1. Install Flutter
 
-3. Install Required Packages
-   Open your terminal or command line and navigate to the root directory of the extracted project. Then run:
+Visit the official [Flutter website](https://docs.flutter.dev/get-started/install) and follow the platform-specific instructions to install Flutter and add it to your system’s PATH.
 
-- flutter pub get
+### 2. Unpack the Project
 
-This command fetches all the dependencies listed in the pubspec.yaml file.
+Extract the zipped project folder to a location of your choice.
 
-Alternatively, if you’re using VS Code, you can open the project folder and run the same command from the built in terminal.
+### 3. Install Required Packages
 
-4. Set Up a Device or Emulator
+Open a terminal in the root directory of the project and run:
 
-For Android:
-a. Open Android Studio
-b. click More Actions > Virtual Device Manager
-c. Click the + Add Device button and select a preferred device (e.g. Pixel 7)
-d. Once the virtual device is created, click Run to launch it
+`flutter pub get`
 
-For iOS (Mac Users only):
-a. Open Xcode
-b. Go to Preferences > Components
-c. Download and install the simulator you'd like to use (e.g. iPhone 14)
-d. Run the app from your terminal or via an IDE like VS Code once the simulator is running
+### 4. Set Up a Device or Emulator
 
-## Debug/Run the application
+#### For Android:
 
-Run the following command in your terminal within the project directory: flutter run.
-If using VS Code, you need to select the emulatng the boor first, usittom line in VS Code window, then click on Run from the top Menu, and click Run without debugging , or you could also make sure you open the emulator first using Android Studio or Xcode using the same steps as above also mentioned below and then debug the code.
+1. Open Android Studio
 
-For Android:
-a. Open Android Studio
-b. click More Actions > Virtual Device Manager
-c. Click the + Add Device button and select a preferred device (e.g. Pixel 7)
-d. Once the virtual device is created, click Run to launch it
+2. Click More Actions > Virtual Device Manager
 
-For iOS (Mac Users only):
-a. Open Xcode
-b. Go to Preferences > Components
-c. Download and install the simulator you'd like to use (e.g. iPhone 14)
-d. Run the app from your terminal or via an IDE like VS Code once the simulator is running
+3. Click + Add Device and select a preferred device, I have tested this app on Google Pixel 7 and 9 for example.
 
-Please be patient while the code debugs and runs, it normally takes some time for the application to run on a new system at first.
+4. Once the emulator is generated i.e: opens infront of you with the home screen - It has built successfully.
+
+#### For iOS (Mac users only):
+
+1. Open Xcode
+
+2. Go to Preferences > Components
+
+3. Download and install the desired simulator, I have tested this app on iphone 14 emulator for example.
+
+4. Launch the simulator and run the app via terminal or VS Code
+
+### 5. Run the Application
+
+#### To run the app from the terminal:
+
+`flutter run`
+
+#### Running from VS Code:
+
+1. Make sure an emulator is running
+
+2. In VS Code, select the emulator from the bottom right corner present in a bar.
+
+3. Click Run > Run Without Debugging from the top menu
+
+Please be patient while the application builds and runs for the first time it may take a while on a new system.
+
+Please also make sure you have are connected to a stable network.
+
+---
 
 ## Notes
 
-The app is not deployed to the Play Store or App Store.
-The backend is completely cloud based and built using firebase.
-Code is currently structured to prioritise functionality over visual polish.
-Further improvements could include session filtering, user profiles, chat, etc.
+- The app is not deployed to the Play Store or App Store.
+- The backend is cloud based, built using Firebase.
 
-## Additional Info
+---
 
-If during any stage any step is unclear please visit the offical flutter website for troubleshooting guide or please dont hesitate to contact the developer of the app Zorain Sultan at zorainsultanasmat@gmail.com.
+## Contact
+
+If any step is unclear or you need assistance, feel free to reach out:
+
+Zorain Sultan
+zorainsultanasmat@gmail.com
